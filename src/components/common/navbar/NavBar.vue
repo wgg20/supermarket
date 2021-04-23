@@ -24,7 +24,8 @@ export default {
     height:44px;
     line-height:44px;
     text-align: center;
-    color:aliceblue
+    color:aliceblue;
+    z-index: 9;
     }
   .left, .right{
     width: 60px;

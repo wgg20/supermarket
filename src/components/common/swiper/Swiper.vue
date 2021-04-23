@@ -17,15 +17,16 @@
 	export default {
 		name: "Swiper",
     props: {
-      // 定时器时间
+      // 定时器时间,每张图片得悬停时间
       interval: {
 		    type: Number,
         default: 2000
       },
       animDuration: {
 		    type: Number,
-        default: 300
+        default: 200
       },
+      //偏距可滚动图片比例
       moveRatio: {
         type: Number,
         default: 0.25
@@ -51,7 +52,7 @@
 
         // 2.开启定时器
         this.startTimer();
-      }, 2000)
+      }, 200)
     },
     methods: {
 		  /**
