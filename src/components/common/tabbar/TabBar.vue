@@ -19,6 +19,13 @@ export default {
     right:0;
     bottom: 0;
     background-color: #eee;
-    z-index: 9;
+    z-index: 10;
+    /* display: flex;
+    background-color: #f6f6f6;
+    height: 49px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0; */
 }
 </style>

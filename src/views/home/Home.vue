@@ -2,49 +2,14 @@
 <div id="home">
   <!-- <nav-bar class="home-nav"><template v-slot:center>购物车</template></nav-bar> -->
  <nav-bar class="home-nav"><div class="center" slot="center">购物车</div></nav-bar>
+ <scroll class="contents" ref="scroll">
  <home-swiper :banners="banners" class="home-swiper"></home-swiper>
  <rec-view :recommends="recommends"></rec-view>
  <feature></feature>
  <tab-control :title="['流行','新款','精选']" class="tab-control" @conClick="conChange"></tab-control>
  <goods-list :goodsInfo="showGoods"></goods-list>
- <ul>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-      <li>wosjji</li>
-    </ul>
+ </scroll>
+ <back-top @click.native="backClick"></back-top>
 </div>
 </template>
 <script>
@@ -52,6 +17,8 @@
 import NavBar from "../../components/common/navbar/NavBar"
 import TabControl from "../../components/content/tabcontrol/TabControl"
 import GoodsList from "../../components/content/goods/GoodsList"
+import Scroll from "../../components/common/scroll/Scroll"
+import BackTop from "../../components/content/backTop/BackTop"
 
 import HomeSwiper from "./childComps/HomeSwiper"
 import RecView from "./childComps/RecView"
@@ -82,7 +49,9 @@ export default {
     RecView,
     Feature,
     TabControl,
-    GoodsList
+    GoodsList,
+    Scroll,
+    BackTop
   },
   computed:{
     showGoods(){
@@ -98,7 +67,12 @@ export default {
     this.getHomeData('sell');
   },
   methods: {
-
+  backClick(){
+    this.$refs.scroll && this.$refs.scroll.scroll.scrollTo(0,0,200);
+    console.log("aaaa");
+    console.log(this.$refs.scroll.scroll);
+    // console.log(this.$refs.scroll.directionY);
+  },
   conChange(index){
     switch(index){
       case 0:
@@ -144,6 +118,9 @@ export default {
 <style scoped>
 #home{
     padding-top: 44px;
+    /* 当前home组件的视口高度 */
+     height: 100vh;
+    /* position: relative; */
   }
   .home-nav{
     background-color: var(--color-tint);
@@ -157,10 +134,25 @@ export default {
     right: 0;
     top:0;
     /* z-index: 9; */
-  }
-  
+  }  
   .tab-control{
     position: sticky;
-    top:44px
+    top:44px;
+    z-index: 9;
   }
+  .contents{
+    /* margin-top: 49px; */
+    height: calc(100% - 44px);
+    /* margin-top: -44px; */
+    /* height: 200px; */
+    /* height: 300px; */
+    /* overflow: hidden; */
+    /* background-color: black; */
+    /* position: absolute;
+    top: 44px;
+    left: 0;
+    right: 0;
+    bottom: 49px; */
+  }
+  
 </style>
