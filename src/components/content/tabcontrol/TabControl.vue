@@ -39,14 +39,13 @@ export default {
 </script> 
 
 <style scoped>
-  .tab-control{
+  /* .tab-control{
     width:100%;
     height:40px;
     line-height:40px;
     display:flex;
     font-size:14px;
     text-align:center;
-    /* z-index:9; */
     background-color: #fff;
     }
     .tab-control-item{
@@ -60,5 +59,29 @@ export default {
     }
     .active span{
       border-bottom: 3px solid var(--color-tint)
-      }
+      } */
+    .tab-control {
+    display: flex;
+    text-align: center;
+    font-size: 15px;
+    height: 40px;
+    line-height: 40px;
+    background-color: #fff;
+  }
+
+  .tab-control-item {
+    flex: 1;
+  }
+
+  .tab-control-item span {
+    padding: 5px;
+  }
+
+  .active {
+    color: var(--color-high-text);
+  }
+
+  .active span {
+    border-bottom: 3px solid var(--color-tint);
+  }
 </style>

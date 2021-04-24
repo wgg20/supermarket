@@ -114,7 +114,7 @@ export default {
     }
   },
   mounted() {
-     const scroll = new BScroll(document.querySelector('.wrapper'));
+     this.scroll = new BScroll(document.querySelector('.wrapper'));
   },
 }
 </script>

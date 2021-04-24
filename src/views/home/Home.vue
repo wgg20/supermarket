@@ -2,14 +2,18 @@
 <div id="home">
   <!-- <nav-bar class="home-nav"><template v-slot:center>购物车</template></nav-bar> -->
  <nav-bar class="home-nav"><div class="center" slot="center">购物车</div></nav-bar>
- <scroll class="contents" ref="scroll">
- <home-swiper :banners="banners" class="home-swiper"></home-swiper>
+ <scroll class="content" ref="scroll" 
+        :probe-type="3"
+         @scrollPosition="contentPosition"
+         :pull-up-load="true"
+         @pullUp="pullMore">
+    <home-swiper :banners="banners" class="home-swiper"></home-swiper>
  <rec-view :recommends="recommends"></rec-view>
  <feature></feature>
  <tab-control :title="['流行','新款','精选']" class="tab-control" @conClick="conChange"></tab-control>
  <goods-list :goodsInfo="showGoods"></goods-list>
  </scroll>
- <back-top @click.native="backClick"></back-top>
+ <back-top @click.native="backTop" v-show="isBtnShow"></back-top>
 </div>
 </template>
 <script>
@@ -20,12 +24,14 @@ import GoodsList from "../../components/content/goods/GoodsList"
 import Scroll from "../../components/common/scroll/Scroll"
 import BackTop from "../../components/content/backTop/BackTop"
 
+
 import HomeSwiper from "./childComps/HomeSwiper"
 import RecView from "./childComps/RecView"
 import Feature from "./childComps/Feature"
 
 
 import {getHomeData, getHomeMultidata} from "../../network/home"
+
 
 
 
@@ -40,7 +46,8 @@ export default {
         'new':{page:0,list:[]},
         'sell':{page:0,list:[]}
       },
-      currentType:'pop'
+      currentType:'pop',
+      isBtnShow:false
     }},
   
   components:{
@@ -51,7 +58,7 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop
+    BackTop,
   },
   computed:{
     showGoods(){
@@ -67,12 +74,6 @@ export default {
     this.getHomeData('sell');
   },
   methods: {
-  backClick(){
-    this.$refs.scroll && this.$refs.scroll.scroll.scrollTo(0,0,200);
-    console.log("aaaa");
-    console.log(this.$refs.scroll.scroll);
-    // console.log(this.$refs.scroll.directionY);
-  },
   conChange(index){
     switch(index){
       case 0:
@@ -86,9 +87,22 @@ export default {
         break
     }
   },
-
-
-
+  backTop(){
+    this.$refs.scroll.scrollTo(0,0);
+    // console.log("aaa");
+    // console.log(this.$refs.scroll.scroll);
+  },
+  //获取当前scroll的位置
+  contentPosition(position){
+    // console.log(position);
+    //将position的y值取反
+    this.isBtnShow = Math.abs(position.y)  > 1000
+  },
+  pullMore(){
+    // console.log("上拉加载更多");
+    //触及到第一页底部时，加载当前种类的页面数据
+    this.getHomeData(this.currentType)
+  },
 
     //网络请求相关代码
     getHomeMultidata(){
@@ -105,54 +119,44 @@ export default {
       const page = this.goods[type].page + 1
       //异步回调商品类型及其页数
       getHomeData(type,page).then(res => {
-        console.log(res);
+        // console.log(res);
       //将当前页数请求到得数据push进定义得数组中保存
         this.goods[type].list.push(...res.data.list);
         //数据推送完后，自定义得页数加一
-        this.goods[type].page+=1
+        this.goods[type].page+=1;
+        this.$refs.scroll.scroll.finishPullUp()
       })
     }
-  },
-}
+}}
 </script>
 <style scoped>
-#home{
+
+   #home {
     padding-top: 44px;
-    /* 当前home组件的视口高度 */
-     height: 100vh;
-    /* position: relative; */
+    height: 100vh;
+    position: relative;
   }
-  .home-nav{
+
+  .home-nav {
     background-color: var(--color-tint);
-  }
-  .center{
-    line-height:44px;
-  }
-  .home-nav{
+    color: #fff;
+
     position: fixed;
-    left:0;
-    right: 0;
-    top:0;
-    /* z-index: 9; */
-  }  
-  .tab-control{
-    position: sticky;
-    top:44px;
-    z-index: 9;
-  }
-  .contents{
-    /* margin-top: 49px; */
-    height: calc(100% - 44px);
-    /* margin-top: -44px; */
-    /* height: 200px; */
-    /* height: 300px; */
-    /* overflow: hidden; */
-    /* background-color: black; */
-    /* position: absolute;
-    top: 44px;
     left: 0;
     right: 0;
-    bottom: 49px; */
+    top: 0;
+    z-index: 9;
   }
-  
+
+  .tab-control {
+    position: sticky;
+    top: 44px;
+    z-index: 10;
+  }
+  .content{
+    height: calc(100% - 44px);
+    overflow: hidden;
+  }
+
+ 
 </style>

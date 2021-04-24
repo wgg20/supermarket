@@ -42,7 +42,7 @@ export default {
   .rec-item img {
     width:55.46px;
     height:55.46px;
-    /* padding-bottom:5px */
+    padding-bottom:5px
   }
 
 </style>
