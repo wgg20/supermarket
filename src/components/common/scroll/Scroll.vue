@@ -37,7 +37,10 @@ export default {
       click:true,
       probeType:this.probeType,
       observeDOM:true,
-      pullUpLoad:this.pullUpLoad
+      pullUpLoad:this.pullUpLoad,
+      observeImage: {
+        debounceTime: 100 // ms
+  }
     });
     //监听滚动事件
     this.scroll.on('scroll',(position)=>{
@@ -48,12 +51,17 @@ export default {
     //监听加载更多
     this.scroll.on('pullingUp',()=>{
      this.$emit('pullUp')
-    })
+    });
+    console.log(this.scroll
+    );
   },
   methods: {
     scrollTo(x,y,time=300){
-      this.scroll.scrollTo(x,y,time)
-    }
+     this.scroll && this.scroll.scrollTo(x,y,time)
+    },
+  refresh(){
+    this.scroll && this.scroll.refresh()
+  }
   },
 }
 </script> 

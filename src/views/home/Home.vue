@@ -71,7 +71,12 @@ export default {
     //一开始就请求三类商品数据
     this.getHomeData('pop');
     this.getHomeData('new');
-    this.getHomeData('sell');
+    this.getHomeData('sell'); 
+  },
+  mounted() {
+     this.$bus.$on('imgLoad',() => {
+      this.$refs.scroll.refresh()
+    })
   },
   methods: {
   conChange(index){
@@ -101,7 +106,8 @@ export default {
   pullMore(){
     // console.log("上拉加载更多");
     //触及到第一页底部时，加载当前种类的页面数据
-    this.getHomeData(this.currentType)
+    this.getHomeData(this.currentType);
+    this.$refs.scroll.refresh()
   },
 
     //网络请求相关代码
