@@ -13,6 +13,7 @@ const Home = () => import('../views/home/Home.vue');
 const Category = () => import('../views/category/Category.vue');
 const ShopCart = () => import('../views/shopcart/ShopCart.vue');
 const Profile = () => import('../views/profile/Profile.vue');
+const Detail = () => import('../views/detial/Detail.vue');
 
 const routes = [
   {
@@ -47,13 +48,17 @@ const routes = [
       title: '我的',
     },
   },
+  {
+    path: '/detail/:iid',
+    component: Detail,
+  },
 ];
 const router = new VueRouter({
   routes,
   mode: 'history',
 });
-router.beforeEach((to, from, next) => {
-  document.title = to.matched[0].meta.title;
-  next();
-});
+// router.beforeEach((to, from, next) => {
+//   document.title = to.matched[0].meta.title;
+//   next();
+// });
 export default router;

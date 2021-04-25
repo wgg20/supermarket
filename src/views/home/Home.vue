@@ -2,6 +2,11 @@
 <div id="home">
   <!-- <nav-bar class="home-nav"><template v-slot:center>购物车</template></nav-bar> -->
  <nav-bar class="home-nav"><div class="center" slot="center">购物车</div></nav-bar>
+ <tab-control :title="['流行','新款','精选']" 
+              @conClick="conChange" 
+              ref="tabControl01" 
+              class="control01" 
+              v-show="isFixed"></tab-control>
  <scroll class="content" ref="scroll" 
         :probe-type="3"
          @scrollPosition="contentPosition"
@@ -10,7 +15,9 @@
     <home-swiper :banners="banners" class="home-swiper"></home-swiper>
  <rec-view :recommends="recommends"></rec-view>
  <feature></feature>
- <tab-control :title="['流行','新款','精选']" class="tab-control" @conClick="conChange"></tab-control>
+ <tab-control :title="['流行','新款','精选']" 
+              @conClick="conChange" 
+              ref="tabControl02" class="control"></tab-control>
  <goods-list :goodsInfo="showGoods"></goods-list>
  </scroll>
  <back-top @click.native="backTop" v-show="isBtnShow"></back-top>
@@ -31,6 +38,7 @@ import Feature from "./childComps/Feature"
 
 
 import {getHomeData, getHomeMultidata} from "../../network/home"
+import {debounce} from "../../common/utils"
 
 
 
@@ -47,7 +55,10 @@ export default {
         'sell':{page:0,list:[]}
       },
       currentType:'pop',
-      isBtnShow:false
+      isBtnShow:false,
+      tabOffSetTop:0,
+      isFixed:false,
+      tabControlisShow:false
     }},
   
   components:{
@@ -72,12 +83,26 @@ export default {
     this.getHomeData('pop');
     this.getHomeData('new');
     this.getHomeData('sell'); 
+
+
+    // setTimeout(
+    //   function(){
+    //     console.log(this.$refs.tabControl.$el.offsetTop);
+    //   },300
+    // )
   },
   mounted() {
+    const refresh = debounce(this.$refs.scroll.refresh,200);
+    //接收来自GoodLidtItem组件的图片加载，一旦加载完，刷新scroll
      this.$bus.$on('imgLoad',() => {
-      this.$refs.scroll.refresh()
-    })
+       refresh()
+    });
   },
+  updated() {
+    this.tabOffSetTop = this.$refs.tabControl02.$el.offsetTop ;
+    // this.tabControlisShow = 
+  },
+
   methods: {
   conChange(index){
     switch(index){
@@ -89,8 +114,10 @@ export default {
         break
       case 2:
         this.currentType='sell'
-        break
+        break; 
     }
+     this.$refs.tabControl02.currentIndex = index;
+     this.$refs.tabControl01.currentIndex = index;
   },
   backTop(){
     this.$refs.scroll.scrollTo(0,0);
@@ -101,7 +128,8 @@ export default {
   contentPosition(position){
     // console.log(position);
     //将position的y值取反
-    this.isBtnShow = Math.abs(position.y)  > 1000
+    this.isBtnShow = Math.abs(position.y)  > 1000;
+    this.isFixed = Math.abs(position.y)  > this.tabOffSetTop;
   },
   pullMore(){
     // console.log("上拉加载更多");
@@ -130,9 +158,11 @@ export default {
         this.goods[type].list.push(...res.data.list);
         //数据推送完后，自定义得页数加一
         this.goods[type].page+=1;
-        this.$refs.scroll.scroll.finishPullUp()
+        //完成下拉加载更多
+        this.$refs.scroll.finishPullUp()
       })
-    }
+    },
+    //防抖，节流
 }}
 </script>
 <style scoped>
@@ -151,18 +181,21 @@ export default {
     left: 0;
     right: 0;
     top: 0;
-    z-index: 9;
+    /* z-index: 9; */
   }
 
-  .tab-control {
+  /* .tab-control {
     position: sticky;
     top: 44px;
     z-index: 10;
-  }
+  } */
   .content{
     height: calc(100% - 44px);
     overflow: hidden;
   }
+  /* .control01{
+    margin-top: 44px;
+  } */
 
  
 </style>

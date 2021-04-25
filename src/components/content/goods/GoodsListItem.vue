@@ -1,5 +1,5 @@
 <template>
-  <div class='goods-list-item'>
+  <div class='goods-list-item' @click="detailClick">
     <img :src="goodsItem.show.img" alt="" @load="itemImgLoad">
     <div class="content">
       <p>{{goodsItem.title}}</p>
@@ -25,8 +25,12 @@ export default {
     return {}
   },
   methods: {
+    //监听图片加载，一旦加载完，将事件传递到Home组件中
     itemImgLoad(){
       this.$bus.$emit('imgLoad')
+    },
+    detailClick(){
+      this.$router.push('/detail/' + this.goodsItem.iid)
     }
   },
 }
