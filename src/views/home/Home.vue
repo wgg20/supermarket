@@ -38,7 +38,8 @@ import Feature from "./childComps/Feature"
 
 
 import {getHomeData, getHomeMultidata} from "../../network/home"
-import {debounce} from "../../common/utils"
+import {itemImgLoad} from '../../common/mixin'
+// import {debounce} from "../../common/utils"
 
 
 
@@ -58,7 +59,9 @@ export default {
       isBtnShow:false,
       tabOffSetTop:0,
       isFixed:false,
-      tabControlisShow:false
+      tabControlisShow:false,
+      // itemImgLoad:null,
+      saveY:0
     }},
   
   components:{
@@ -76,6 +79,7 @@ export default {
      return this.goods[this.currentType].list
     }
   },
+  mixins:[itemImgLoad],
   created(){
     //请求轮播图和其下面得商品得数据
     this.getHomeMultidata();
@@ -91,12 +95,19 @@ export default {
     //   },300
     // )
   },
+  deactivated() {
+    //保存y值
+    this.saveY = this.$refs.scroll.scroll.y
+    //取消全局事件的监听
+    this.$bus.$off("imgLoad",this.itemImgLoad)
+  },
   mounted() {
-    const refresh = debounce(this.$refs.scroll.refresh,200);
-    //接收来自GoodLidtItem组件的图片加载，一旦加载完，刷新scroll
-     this.$bus.$on('imgLoad',() => {
-       refresh()
-    });
+    // const refresh = debounce(this.$refs.scroll.refresh,200);
+    // 接收来自GoodLidtItem组件的图片加载，一旦加载完，刷新scroll
+    //    this.itemImgLoad = () => {
+    //    refresh()
+    // }
+    //  this.$bus.$on('imgLoad',this.itemImgLoad);
   },
   updated() {
     this.tabOffSetTop = this.$refs.tabControl02.$el.offsetTop ;

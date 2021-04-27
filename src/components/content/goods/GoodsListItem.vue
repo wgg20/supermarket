@@ -1,6 +1,6 @@
 <template>
   <div class='goods-list-item' @click="detailClick">
-    <img :src="goodsItem.show.img" alt="" @load="itemImgLoad">
+    <img :src="imgShow" alt="" @load="itemImgLoad">
     <div class="content">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>
@@ -24,6 +24,11 @@ export default {
   data () {
     return {}
   },
+   computed:{
+    imgShow(){ 
+      return this.goodsItem.image ||this.goodsItem.show.img
+    }
+   },
   methods: {
     //监听图片加载，一旦加载完，将事件传递到Home组件中
     itemImgLoad(){
