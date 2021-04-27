@@ -33,7 +33,7 @@ export default {
   width: 100%;
 }
 .swiper-item{
-  height: 300px;
+  height: 250px;
   overflow: hidden;
 }
 </style>
