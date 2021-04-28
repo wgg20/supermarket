@@ -58,6 +58,7 @@ export default {
   height: 1px;
   background-color: #a3a3a5;
   position: relative;
+  background-color: #fff;
 }
 
 .text-style .top {

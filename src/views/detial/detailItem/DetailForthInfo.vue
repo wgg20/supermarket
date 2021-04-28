@@ -42,6 +42,7 @@ export default {
   padding: 20px 17px;
   font-size: 12px;
   border-bottom: 5px solid #f2f5f8;
+  background-color: #fff;
 }
 
 .detail-forth-info table {

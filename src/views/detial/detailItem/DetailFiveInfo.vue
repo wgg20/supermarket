@@ -61,7 +61,7 @@ export default {
   border-bottom: 5px solid #f2f5f8;
   background-color: #fff;
   position: relative;
-  z-index: 18;
+  z-index: 20;
 }
 
 .info-header {

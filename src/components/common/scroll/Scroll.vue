@@ -48,7 +48,7 @@ export default {
       this.scroll.on('scroll',(position)=>{
       // console.log(position);
       //将position传给需要的组件
-      this.$emit('scrollPosition',position)
+      this.$emit("scroll",position)
     });
     }
     //监听加载更多，滚动到底部

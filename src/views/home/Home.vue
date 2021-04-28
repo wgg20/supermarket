@@ -9,7 +9,7 @@
               v-show="isFixed"></tab-control>
  <scroll class="content" ref="scroll" 
         :probe-type="3"
-         @scrollPosition="contentPosition"
+         @scroll="contentPosition"
          :pull-up-load="true"
          @pullUp="pullMore">
     <home-swiper :banners="banners" class="home-swiper"></home-swiper>
@@ -17,7 +17,8 @@
  <feature></feature>
  <tab-control :title="['流行','新款','精选']" 
               @conClick="conChange" 
-              ref="tabControl02" class="control"></tab-control>
+              ref="tabControl02" 
+              class="control"></tab-control>
  <goods-list :goodsInfo="showGoods"></goods-list>
  </scroll>
  <back-top @click.native="backTop" v-show="isBtnShow"></back-top>
@@ -137,10 +138,10 @@ export default {
   },
   //获取当前scroll的位置
   contentPosition(position){
-    // console.log(position);
+    console.log(position);
     //将position的y值取反
-    this.isBtnShow = Math.abs(position.y)  > 1000;
-    this.isFixed = Math.abs(position.y)  > this.tabOffSetTop;
+    this.isBtnShow = -(position.y)  > 1000;
+    this.isFixed = -(position.y)  > this.tabOffSetTop;
   },
   pullMore(){
     // console.log("上拉加载更多");

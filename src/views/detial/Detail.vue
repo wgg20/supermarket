@@ -1,17 +1,20 @@
 <template>
   <div id='detail'>
-    <detail-item class="nav-bar"></detail-item>
-    <scroll class="scroll-content" ref="scroll" :pull-up-load="true">
+    <detail-item class="nav-bar" @chooseClick="indexClick" ref="navbar"></detail-item>
+    <scroll class="scroll-content" ref="scroll" :pull-up-load="true" @scroll="scroll" :probeType="2">
       <detail-swiper :swiperImages="topImages"></detail-swiper>
       <detail-first-info :goods="goods"></detail-first-info>
       <detail-second-info :shops="shops"></detail-second-info>
       <detail-third-info :details="details" @imgLoad="thirdImgLoad"></detail-third-info>
-      <detail-forth-info :items="items" ></detail-forth-info>
-      <detail-five-info :comments="comments"></detail-five-info>
-      <goods-list :goodsInfo="recodeItem"></goods-list>
+      <detail-forth-info :items="items" ref="params"></detail-forth-info>
+      <detail-five-info :comments="comments" ref="comments"></detail-five-info>
+      <goods-list :goodsInfo="recodeItem" ref="goods"></goods-list>
       <ul class="ul">
     </ul>
     </scroll>
+    <detail-bottom-bar></detail-bottom-bar>
+    <back-top v-show="isShow" @click.native="isTop"></back-top>
+    
   </div>
 </template>
 
@@ -25,12 +28,15 @@ import DetailThirdInfo from './detailItem/DetailThirdInfo'
 import DetailForthInfo from './detailItem/DetailForthInfo'
 import DetailFiveInfo from './detailItem/DetailFiveInfo'
 import GoodsList from '../../components/content/goods/GoodsList'
+import DetailBottomBar from './detailItem/DetailBottomBar'
 
 import {getDetails,Goods,Shops,Items,getRecommend} from '../../network/details'
 import {itemImgLoad} from '../../common/mixin'
 // import {debounce} from '../../common/utils'
 
 import Scroll from "../../components/common/scroll/Scroll"
+import BackTop from "../../components/content/backTop/BackTop"
+import { debounce } from '../../common/utils'
 
 
 
@@ -47,6 +53,8 @@ export default {
     DetailFiveInfo,
     Scroll,
     GoodsList,
+    DetailBottomBar,
+    BackTop
     // itemImgLoad:null
     
   },
@@ -59,7 +67,11 @@ export default {
       details:{},
       items:{},
       comments:{},
-      recodeItem:[]
+      recodeItem:[],
+      themeTopY:[],
+      getThemeTopY:null,
+      currentIndex:0,
+      isShow:false
     }
   },
   mixins:[itemImgLoad],
@@ -76,13 +88,22 @@ export default {
 
       if(data.rate.cRate !== 0){
         this.comments = data.rate.list[0]
-      }
+      }})
 
        getRecommend().then((res)=>{
         this.recodeItem=res.data.list
-        console.log(res);
-      })
-    })
+        console.log(res)
+    }),
+     this.getThemeTopY = debounce(()=>{
+          
+          this.$nextTick(()=>{
+          this.themeTopY = []
+          this.themeTopY.push(0)
+          this.themeTopY.push(this.$refs.params.$el.offsetTop -44 )
+          this.themeTopY.push(this.$refs.comments.$el.offsetTop -44 )
+          this.themeTopY.push(this.$refs.goods.$el.offsetTop -44)
+          })
+      },100)
   },
   mounted() {
     //  const refresh = debounce(this.$refs.scroll.refresh,200);
@@ -100,6 +121,32 @@ export default {
   methods: {
     thirdImgLoad(){
       this.$refs.scroll.refresh()
+      this.getThemeTopY()
+    },
+    indexClick(index){
+      this.$refs.scroll.scrollTo(0,-this.themeTopY[index],100)
+    },
+    scroll(position){
+      const positionY = -position.y;
+      // console.log(positionY);
+      let length = this.themeTopY.length;
+      for (let i = 0; i < length; i++) {
+        // if(this.currentIndex!==i && ((i<length-1 && positonY>=this.scrollTop[i] && positonY<this.scrollTop[i+1])
+        // || (i==length-1 &&positonY>=this.scrollTop[i]))){
+        //   this.currentIndex=i
+        //   this.$refs.nav.currentColor=this.currentIndex
+        // }
+        // this.currentIndex!==i作用是防止多次打印 在存储数组里面的索引号不等于设置属性值currentIndex的情况下
+        if(this.currentIndex !==i && ((i<length-1 && positionY>=this.themeTopY[i] && positionY<this.themeTopY[i+1]) || (i===length-1 && positionY >= this.themeTopY[i]))){
+          this.currentIndex=i
+          this.$refs.navbar.currentIndex=this.currentIndex
+        }
+      }
+      this.scrollTopImg=positionY>10000
+      this.isShow = -(position.y)  > 1000;
+    },
+    isTop(){
+      this.$refs.scroll.scrollTo(0,0,200)
     }
   },
 }
@@ -123,6 +170,6 @@ export default {
   z-index: 5;
 }
 .scroll-content{
-  height: calc(100% - 44px);
+  height: calc(100% - 90px );
 }
 </style>

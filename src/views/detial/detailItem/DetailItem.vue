@@ -34,7 +34,7 @@ export default {
   methods: {
     showClick(index){
       this.currentIndex = index;
-      // this.$emit('chooseClick',index)
+      this.$emit('chooseClick',index)
     },
     backClick(){
       // this.$router.push('/home')
@@ -45,8 +45,16 @@ export default {
 </script> 
 
 <style scoped>
+  /* #detail-item{
+    
+  } */
   .detail-navbar{
     font-size:14px;
+    /* position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0; */
+    /* z-index: 2000; */
     /* background: #eee; */
   }
   .content{
