@@ -2,6 +2,11 @@
   <div id='detail'>
     <detail-item class="nav-bar" @chooseClick="indexClick" ref="navbar"></detail-item>
     <scroll class="scroll-content" ref="scroll" :pull-up-load="true" @scroll="scroll" :probeType="2">
+      <!-- <ul class="baby">
+        <li v-for="(item,index) in $store.state.cartList" :key="index">
+          {{item}}
+        </li>
+      </ul> -->
       <detail-swiper :swiperImages="topImages"></detail-swiper>
       <detail-first-info :goods="goods"></detail-first-info>
       <detail-second-info :shops="shops"></detail-second-info>
@@ -12,7 +17,7 @@
       <ul class="ul">
     </ul>
     </scroll>
-    <detail-bottom-bar></detail-bottom-bar>
+    <detail-bottom-bar @addCart="addCarts"></detail-bottom-bar>
     <back-top v-show="isShow" @click.native="isTop"></back-top>
     
   </div>
@@ -147,12 +152,27 @@ export default {
     },
     isTop(){
       this.$refs.scroll.scrollTo(0,0,200)
+    },
+    addCarts(){
+      const product={}
+      product.image=this.topImages[0]
+      product.title=this.goods.title
+      product.desc=this.goods.desc
+      product.price=this.goods.lowNowPrice
+      product.iid=this.iid
+
+      this.$store.dispatch('addCart',product)
+      console.log('----');
     }
   },
 }
 </script> 
 
 <style scoped>
+.baby{
+  z-index: 90;
+  height: 150px;
+}
 .ul{
   height: 100px;
 }

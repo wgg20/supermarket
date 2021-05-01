@@ -138,7 +138,7 @@ export default {
   },
   //获取当前scroll的位置
   contentPosition(position){
-    console.log(position);
+    // console.log(position);
     //将position的y值取反
     this.isBtnShow = -(position.y)  > 1000;
     this.isFixed = -(position.y)  > this.tabOffSetTop;
@@ -188,6 +188,7 @@ export default {
   .home-nav {
     background-color: var(--color-tint);
     color: #fff;
+    font-size: 16px;
 
     position: fixed;
     left: 0;

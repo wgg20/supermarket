@@ -20,9 +20,10 @@ export class Goods {
     this.lowNowPrice = itemInfo.lowNowPrice;
     this.oldPrice = itemInfo.oldPrice;
     this.discountDesc = itemInfo.discountDesc;
-    this.lowNowPrice = itemInfo.lowNowPrice;
+    this.newPrice = itemInfo.price;
     this.columns = columns;
     this.services = services;
+    this.desc = itemInfo.desc;
   }
 }
 

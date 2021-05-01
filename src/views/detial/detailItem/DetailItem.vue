@@ -49,7 +49,7 @@ export default {
     
   } */
   .detail-navbar{
-    font-size:14px;
+    font-size:16px;
     /* position: fixed;
     left: 0;
     right: 0;
@@ -66,6 +66,8 @@ export default {
   .left-item img{
     display: block;
     margin: 11px ;
+    width: 16px;
+    height: 16px;
   }
   .active{
     /* color: var(--color-tint); */
